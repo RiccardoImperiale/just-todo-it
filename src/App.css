@@ -1,0 +1,30 @@
+:root {
+    --todo-dark: #23272f;
+    --todo-darker: #16181d;
+    --todo-primary: #58c4dc;
+    --todo-light: #f6f7f9;
+    --todo-secondary-dark: #333a44;
+    --todo-secondary: #353a46;
+    --todo-secondary-light: #535967;
+}
+
+html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--todo-primary) var(--todo-darker);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: var(--todo-dark);
+    font-family: sans-serif;
+    color: var(--todo-light);
+    height: 100vh;
+}
+
+.container {
+    max-width: 1080px;
+    width: 90%;
+    margin: auto;
+}
