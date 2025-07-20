@@ -23,7 +23,7 @@ body {
     height: 100vh;
 }
 
-.container {
+main {
     max-width: 1080px;
     width: 90%;
     margin: auto;
