@@ -4,7 +4,7 @@ import { TodoLogo } from '@assets/StaticAssets'
 export const Header = () => {
     return (
         <Head>
-            <Logo src={TodoLogo} alt="just todo it app logo" />
+            <img src={TodoLogo} width={80} alt="just todo it app logo" />
         </Head>
     )
 }
@@ -16,7 +16,4 @@ const Head = styled.header`
     padding-bottom: 0.6rem;
     color: var(--todo-primary);
     margin-bottom: 3rem;
-`
-const Logo = styled.img`
-    width: 80px;
 `
