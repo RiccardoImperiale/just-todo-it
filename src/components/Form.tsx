@@ -1,11 +1,28 @@
+import { useState, useEffect } from 'react'
 import { useTodoStore } from '@/state/todoStore'
-import { useState } from 'react'
 import { TiPlus } from 'react-icons/ti'
 import styled from 'styled-components'
+import { useMutation } from '@tanstack/react-query'
+import { getRandomTodo } from '@/services/api'
 
 export const Form = () => {
     const [text, setText] = useState('')
     const addTodo = useTodoStore((state) => state.addTodo)
+
+    const {
+        mutate: generateTodo,
+        error,
+        isPending,
+    } = useMutation({
+        mutationFn: getRandomTodo,
+        onSuccess: (data) => {
+            const generated = data.todo
+            setText(generated)
+        },
+        onError: (error) => {
+            console.error('Failed to generate random todo:', error)
+        },
+    })
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -15,19 +32,30 @@ export const Form = () => {
         }
     }
 
+    const thinkingText = useThinkingAnimation(isPending)
+
+    let displayText = isPending ? thinkingText : text
+    if (error) displayText = error.message + ' 😢'
+
     return (
         <form onSubmit={handleSubmit}>
             <Wrapper>
                 <Input
-                    value={text}
+                    value={displayText}
                     onChange={(e) => setText(e.target.value)}
                     type="text"
                     placeholder="Something to do?"
                 />
-                <Button type="submit">
-                    <span>Add</span>
-                    <TiPlus className="plus_icon" />
-                </Button>
+                <Buttons>
+                    <Button type="button" onClick={() => generateTodo()}>
+                        <span>Generate Random</span>
+                        <TiPlus className="plus_icon" />
+                    </Button>
+                    <Button type="submit">
+                        <span>Add</span>
+                        <TiPlus className="plus_icon" />
+                    </Button>
+                </Buttons>
             </Wrapper>
         </form>
     )
@@ -51,6 +79,8 @@ const Input = styled.input`
     padding-left: 2.5rem;
     color: var(--todo-light);
     caret-color: var(--todo-primary);
+    padding-right: 19rem;
+    overflow: auto;
 
     &::placeholder {
         color: var(--todo-darker);
@@ -61,9 +91,14 @@ const Input = styled.input`
     }
 `
 
-const Button = styled.button`
+const Buttons = styled.div`
+    display: flex;
+    gap: 0.4rem;
     position: absolute;
     right: 0.9rem;
+`
+
+const Button = styled.button`
     background-color: var(--todo-darker);
     color: var(--todo-light);
     padding: 0.7rem 1.2rem 0.7rem 1.6rem;
@@ -83,3 +118,21 @@ const Button = styled.button`
         color: var(--todo-primary);
     }
 `
+function useThinkingAnimation(active: boolean, interval = 500) {
+    const [count, setCount] = useState(0)
+
+    useEffect(() => {
+        if (!active) {
+            setCount(0)
+            return
+        }
+
+        const id = setInterval(() => {
+            setCount((prev) => (prev === 3 ? 0 : prev + 1))
+        }, interval)
+
+        return () => clearInterval(id)
+    }, [active, interval])
+
+    return `🤔 ${'💭'.repeat(count)}`
+}
