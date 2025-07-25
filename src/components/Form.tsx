@@ -3,7 +3,7 @@ import { useTodoStore } from '@/state/todoStore'
 import { TiPlus } from 'react-icons/ti'
 import styled from 'styled-components'
 import { useMutation } from '@tanstack/react-query'
-import { getRandomTodo } from '@/services/api'
+import { generateRandomTodo } from '@/services/api'
 
 export const Form = () => {
     const [text, setText] = useState('')
@@ -14,7 +14,7 @@ export const Form = () => {
         error,
         isPending,
     } = useMutation({
-        mutationFn: getRandomTodo,
+        mutationFn: generateRandomTodo,
         onSuccess: (data) => {
             const generated = data.todo
             setText(generated)
@@ -40,11 +40,14 @@ export const Form = () => {
     return (
         <form onSubmit={handleSubmit}>
             <Wrapper>
+                <Label htmlFor="todoInput">New todo</Label>
                 <Input
+                    id="todoInput"
                     value={displayText}
                     onChange={(e) => setText(e.target.value)}
                     type="text"
                     placeholder="Something to do?"
+                    autoComplete="off"
                 />
                 <Buttons>
                     <Button type="button" onClick={() => generateTodo()}>
@@ -67,6 +70,18 @@ const Wrapper = styled.div`
     display: flex;
     align-items: center;
     max-width: 750px;
+`
+
+const Label = styled.label`
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+    white-space: nowrap;
 `
 
 const Input = styled.input`
