@@ -94,7 +94,7 @@ const Input = styled.input`
     padding-left: 2.5rem;
     color: var(--todo-light);
     caret-color: var(--todo-primary);
-    padding-right: 19rem;
+    padding-right: 18.2rem;
     overflow: auto;
 
     &::placeholder {

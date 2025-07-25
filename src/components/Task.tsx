@@ -62,6 +62,14 @@ const Input = styled.input<{ checked?: boolean }>`
     &:focus {
         outline: none;
     }
+
+    ${({ checked }) =>
+        !checked &&
+        `
+        &:hover {
+            cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='22' font-size='22'>✏️</text></svg>") 0 10, text;
+        }
+    `}
 `
 
 const CheckIcon = styled(MdCheckCircle)`
